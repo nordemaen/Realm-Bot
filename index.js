@@ -5,7 +5,7 @@ const path = require('path');
 //JSON data
 const clientConfig = require("./info.json");
 
-const client = new Discord.Client()
+const client = new Discord.Client();
 client.commands = new Discord.Collection();
 
 let modules = fs.readdirSync('./commands/').filter(file => fs.statSync(path.join('./commands/', file)).isDirectory());

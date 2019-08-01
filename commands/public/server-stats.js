@@ -57,6 +57,22 @@ module.exports.run = async (client, message, args, clientConfig) => {
                         serverArray.push("[" + serverName.name + "]" + '\n')
                     }
 
+                    let serverArrayEU = [];
+                    let serverArrayUsageEU = [];
+                    for (let serverName of serverNamesEurope) {
+                        if (serverName.status < 0.75) {
+                            serverName.format = "✅ Normal";
+                        }
+                        else if (serverName.status == 0.75) {
+                            serverName.format = "🚧 Crowded";
+                        }
+                        else {
+                            serverName.format = "❌ Full";
+                        }
+                        serverArrayUsageEU.push(serverName.format + '\n');
+                        serverArrayEU.push("[" + serverName.name + "]" + '\n')
+                    }
+
                     if (!args.join(" ")) {
                         let properUsage = new Discord.RichEmbed()
                             .setFooter(`Invalid Syntax\n|server [EU or US or AS or ALL]`)
@@ -65,12 +81,26 @@ module.exports.run = async (client, message, args, clientConfig) => {
                         message.channel.send(properUsage);
                     }
 
-                    if (args.join(" ") == "US") {
+                    if (args.join(" ").toUpperCase() == "EU") {
                         let serverStatus = new Discord.RichEmbed()
-                        .setAuthor("Current Server Statistics", client.user.displayAvatarURL)
-                        .setColor(0xeeffee)
+                        .setAuthor("Current Server Statistics", "https://cdn.discordapp.com/attachments/510865384384102425/605536852338016267/sprite.png")
+                        .setColor(0xd3e5b5)
+                        .addField("Europe", `\`\`\`ini\n${serverArrayEU.toString().replace(/,/g, "")}\`\`\`\t`, true)
+                        .addField("Usage by Players", `\`\`\`${serverArrayUsageEU.toString().replace(/,/g, "")}\`\`\`\t`, true)
+                        .setFooter("Requested by: " + message.author.username, message.author.displayAvatarURL)
+                        .setTimestamp()
+
+                        message.channel.send(serverStatus)
+                    }
+
+                    if (args.join(" ").toUpperCase() == "US") {
+                        let serverStatus = new Discord.RichEmbed()
+                        .setAuthor("Current Server Statistics", "https://cdn.discordapp.com/attachments/510865384384102425/605536852338016267/sprite.png")
+                        .setColor(0xd3e5b5)
                         .addField("United States", `\`\`\`ini\n${serverArray.toString().replace(/,/g, "")}\`\`\`\t`, true)
-                        .addField("Usage", `\`\`\`${serverArrayUsage.toString().replace(/,/g, "")}\`\`\`\t`, true)
+                        .addField("Usage by Players", `\`\`\`${serverArrayUsage.toString().replace(/,/g, "")}\`\`\`\t`, true)
+                        .setFooter("Requested by: " + message.author.username, message.author.displayAvatarURL)
+                        .setTimestamp()
 
                         message.channel.send(serverStatus)
                     }
